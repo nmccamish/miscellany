@@ -1,0 +1,25 @@
+(use-modules (srfi srfi-19))
+
+(define computus
+  (lambda (year)
+    (let* ((a (modulo year 19))
+           (b (floor-quotient year 100))
+           (c (modulo year 100))
+           (d (floor-quotient b 4))
+           (e (floor-remainder b 4))
+           (f (floor-quotient (+ b 8) 25))
+           (g (floor-quotient (+ (- b f) 1) 3))
+           (h (floor-remainder (+ (* 19 a) (- b d g) 15) 30))
+           (i (floor-quotient c 4))
+           (k (floor-remainder c 4))
+           (l (floor-remainder (+ 32 (* 2 e) (* 2 i) (- 0 h k)) 7))
+           (m (floor-quotient (+ a (* 11 h) (* 22 l)) 451))
+           (t (+ h l 114 (- 0 (* 7 m))))
+           (month (floor-quotient t 31))
+           (day (+ 1 (floor-remainder t 31))))
+      (make-date 0 0 0 0 day month year 0))))
+
+(display (string-append "The Easter date for this year is: "
+                        (date->string (computus (date-year (current-date)))
+                                      "~b ~e, ~Y")))
+(newline)
